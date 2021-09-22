@@ -16,12 +16,18 @@ data = p.read_csv('titanic.csv')
 10 - Embarked
 '''
 keys = data.keys()
-survivedNumber = 0
 
-for i in data[keys[1]]:
-    if i == 1:
-        survivedNumber = survivedNumber + 1
 
-result = round(survivedNumber / len(data[keys[1]]) * 100,2)
+def count_survived():
+    survived = 0
+
+    for i in data[keys[1]]:
+        if i == 1:
+            survived = survived + 1
+
+    return survived
+
+
+result = round(count_survived() / len(data[keys[1]]) * 100, 2)
 
 print(result)
