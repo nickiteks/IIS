@@ -1,11 +1,8 @@
 import numpy as np
 import pandas as p
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
-import matplotlib.pyplot as plt
-import graphviz
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+import eli5
 
 data = p.read_csv('titanic.csv')
 
@@ -23,17 +20,30 @@ data = p.read_csv('titanic.csv')
 10 - Embarked
 '''
 keys = data.keys()
-data[keys[5]].update(data[keys[5]].replace(np.nan, 0))
-data[keys[4]] = data[keys[4]].factorize()[0]
 
+# удаление шумов
+data[keys[4]] = data[keys[4]].factorize()[0]
+data[keys[5]].update(data[keys[5]].replace(np.nan, data[keys[5]].median()))
+
+# отделение нужных данных
 X = data.drop([keys[0], keys[1], keys[2], keys[3], keys[6], keys[7], keys[8], keys[9], keys[10], keys[11]], axis=1)
 y = data[keys[1]]
 
-clf = tree.DecisionTreeClassifier()
-clf = clf.fit(X, y)
+# выборка данных для обучения и тестирования
+X_train = X[:-200]
+X_test = X[-200:]
+y_train = y[:-200]
+y_test = y[-200:]
 
-dot_data = tree.export_graphviz(clf, out_file='file')
-graph = graphviz.Source(dot_data)
+# обучение
+clf = tree.DecisionTreeClassifier(max_depth=5, random_state=21)
+clf.fit(X_train, y_train)
+print(clf.score(X_train, y_train))
 
-tree.plot_tree(clf)
-plt.show()
+# тестирование
+rfc = RandomForestClassifier(n_estimators=10, max_depth=5, random_state=21)
+rfc.fit(X_train, y_train)
+print(rfc.score(X_test, y_test))
+
+# отпределение веса
+print(eli5.explain_weights_sklearn(clf, feature_names=X_train.columns.values))
