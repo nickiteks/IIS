@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
 import matplotlib.pyplot as plt
-import  graphviz
+import graphviz
 from sklearn.metrics import classification_report, confusion_matrix
 
 data = p.read_csv('titanic.csv')
@@ -29,18 +29,11 @@ data[keys[4]] = data[keys[4]].factorize()[0]
 X = data.drop([keys[0], keys[1], keys[2], keys[3], keys[6], keys[7], keys[8], keys[9], keys[10], keys[11]], axis=1)
 y = data[keys[1]]
 
-
 clf = tree.DecisionTreeClassifier()
 clf = clf.fit(X, y)
 
-
-from sklearn.datasets import load_iris
-from sklearn import tree
-iris = load_iris()
-X, y = iris.data, iris.target
-clf = tree.DecisionTreeClassifier()
-clf = clf.fit(X, y)
-
-dot_data = tree.export_graphviz(clf, out_file=None)
+dot_data = tree.export_graphviz(clf, out_file='file')
 graph = graphviz.Source(dot_data)
-graph.render("iris")
+
+tree.plot_tree(clf)
+plt.show()
