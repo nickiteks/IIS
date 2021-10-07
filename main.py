@@ -1,40 +1,34 @@
-import pandas as p
-import eli5
-from treeMethod import Manager
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.datasets import make_circles
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 
-data = p.read_csv('titanic.csv')
+data = make_circles(noise=0.2, factor=0.5, random_state=1)
 
-''' --Keys--
-0 - PassengerId
-1 - Survived
-2 - Pclass
-3 - Name
-4 - Sex
-5 - Age
-6 - SibSp
-7 - Ticket
-8 - Fare
-9 - Cabin
-10 - Embarked
-'''
-keys = data.keys()
+X = np.array(data[0])
+y = np.array(data[1])
 
-manager = Manager(data)
+X = X[:, np.newaxis, 1]
 
-data = manager.data_preparation()
+print(X)
 
-# отделение нужных данных
-X = data.drop([keys[0], keys[1], keys[2], keys[6], keys[7], keys[8], keys[9], keys[10], keys[11]], axis=1)
-y = data[keys[1]]
-print(X.head())
-# выборка данных для обучения и тестирования
-X_train = X[:-200]
-X_test = X[-200:]
-y_train = y[:-200]
-y_test = y[-200:]
+X_train = X[:-20]
+X_test = X[-20:]
+y_train = y[:-20]
+y_test = y[-20:]
 
-clf = manager.learn_tree(X_train,y_train)
-manager.test_tree(X_train,y_train,X_test,y_test)
+model = LinearRegression().fit(X_train, y_train)
+y_pred = model.predict(X_test)
 
-# отпределение веса
-print(eli5.explain_weights_sklearn(clf, feature_names=X_train.columns.values))
+
+print(model.intercept_)
+print(model.coef_)
+
+plt.scatter(X_test, y_test,  color='black')
+plt.plot(X_test, y_pred, color='blue', linewidth=3)
+
+plt.xticks(())
+plt.yticks(())
+
+plt.show()
