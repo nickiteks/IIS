@@ -4,7 +4,6 @@ from Models import Models
 
 models_manager = Models()
 
-# генерация данных по варианту
 data = make_circles(noise=0.2, factor=0.5, random_state=1)
 
 X = np.array(data[0])
@@ -19,6 +18,6 @@ y_test = y[-20:]
 
 models_manager.linear(X_train, X_test, y_train, y_test)
 
-models_manager.polynomial(X, y)
+models_manager.polynomial(X_train, y_train)
 
 models_manager.ridge(X_train, X_test, y_train, y_test)

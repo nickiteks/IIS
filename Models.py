@@ -36,9 +36,6 @@ class Models:
 
         plt.scatter(X, y, color='red')
         plt.plot(X, pol_reg.predict(poly_reg.fit_transform(X)), color='blue')
-        plt.title('Truth or Bluff (Linear Regression)')
-        plt.xlabel('Position level')
-        plt.ylabel('Salary')
         plt.show()
 
     def ridge(self, X_train, X_test, y_train, y_test):
