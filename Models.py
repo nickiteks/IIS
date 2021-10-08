@@ -1,4 +1,6 @@
+import numpy as np
 from matplotlib import pyplot as plt
+from sklearn import metrics
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.preprocessing import PolynomialFeatures
 
@@ -10,8 +12,9 @@ class Models:
         y_pred = model.predict(X_test)
 
         print('___Линейная регрессия___')
-        print(model.intercept_)
-        print(model.coef_)
+        print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+        print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+        print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
         print('')
 
         plt.scatter(X_test, y_test, color='black')
@@ -23,10 +26,12 @@ class Models:
         X_poly = poly_reg.fit_transform(X)
         pol_reg = LinearRegression()
         pol_reg.fit(X_poly, y)
+        y_pred = pol_reg.predict(X_poly)
 
         print('___Полиномиальная  регрессия___')
-        print(pol_reg.intercept_)
-        print(pol_reg.coef_)
+        print('Mean Absolute Error:', metrics.mean_absolute_error(y, y_pred))
+        print('Mean Squared Error:', metrics.mean_squared_error(y, y_pred))
+        print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y, y_pred)))
         print('')
 
         plt.scatter(X, y, color='red')
@@ -42,8 +47,9 @@ class Models:
         y_pred = clf.predict(X_test)
 
         print('___Гребневая полиномиальная регрессия___')
-        print(clf.intercept_)
-        print(clf.coef_)
+        print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+        print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+        print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
 
         plt.scatter(X_test, y_test, color='black')
         plt.plot(X_test, y_pred, color='blue', linewidth=3)
