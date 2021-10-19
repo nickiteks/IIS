@@ -1,40 +1,53 @@
 import pandas as p
-import eli5
-from treeMethod import Manager
 
-data = p.read_csv('titanic.csv')
+data = p.read_csv('spotify_dataset.csv')
 
 ''' --Keys--
-0 - PassengerId
-1 - Survived
-2 - Pclass
-3 - Name
-4 - Sex
-5 - Age
-6 - SibSp
-7 - Ticket
-8 - Fare
-9 - Cabin
-10 - Embarked
+ 0   Index                      1556 non-null   int64 
+ 1   Highest Charting Position  1556 non-null   int64 
+ 2   Number of Times Charted    1556 non-null   int64 
+ 3   Week of Highest Charting   1556 non-null   object
+ 4   Song Name                  1556 non-null   object
+ 5   Streams                    1556 non-null   object
+ 6   Artist                     1556 non-null   object
+ 7   Artist Followers           1556 non-null   object
+ 8   Song ID                    1556 non-null   object
+ 9   Genre                      1556 non-null   object
+ 10  Release Date               1556 non-null   object
+ 11  Weeks Charted              1556 non-null   object
+ 12  Popularity                 1556 non-null   object
+ 13  Danceability               1556 non-null   object
+ 14  Energy                     1556 non-null   object
+ 15  Loudness                   1556 non-null   object
+ 16  Speechiness                1556 non-null   object
+ 17  Acousticness               1556 non-null   object
+ 18  Liveness                   1556 non-null   object
+ 19  Tempo                      1556 non-null   object
+ 20  Duration (ms)              1556 non-null   object
+ 21  Valence                    1556 non-null   object
+ 22  Chord                      1556 non-null   object
 '''
 keys = data.keys()
 
-manager = Manager(data)
 
-data = manager.data_preparation()
+def count_sum_streams():
+    sum = 0
+    for i in data[keys[5]]:
+        number = i.replace(',', '')
+        sum += int(number)
 
-# отделение нужных данных
-X = data.drop([keys[0], keys[1], keys[2], keys[6], keys[7], keys[8], keys[9], keys[10], keys[11]], axis=1)
-y = data[keys[1]]
-print(X.head())
-# выборка данных для обучения и тестирования
-X_train = X[:-200]
-X_test = X[-200:]
-y_train = y[:-200]
-y_test = y[-200:]
+    return sum
 
-clf = manager.learn_tree(X_train,y_train)
-manager.test_tree(X_train,y_train,X_test,y_test)
 
-# отпределение веса
-print(eli5.explain_weights_sklearn(clf, feature_names=X_train.columns.values))
+def average_followers():
+    sum = 0
+    for i in range(len(data[keys[7]])):
+        if data[keys[7]][i] == ' ':
+            sum += 1
+        else:
+            sum += int(data[keys[7]][i])
+    return round(sum/len(data[keys[7]]),2)
+
+
+print(count_sum_streams())
+print(average_followers())
