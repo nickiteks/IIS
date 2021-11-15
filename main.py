@@ -17,7 +17,6 @@ m = metadata['vote_count'].quantile(0.90)
 def weighted_rating(x, m=m, C=C):
     v = x['vote_count']
     R = x['vote_average']
-    # Calculation based on the IMDB formula
     return ((v / (v + m)) * R) + ((m / (v + m)) * C)
 
 
@@ -36,6 +35,7 @@ cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 indices = pd.Series(metadata.index, index=metadata['title']).drop_duplicates()
 
 
+# высчитивание похожих фильмов на основе описания фильмов
 def get_recommendations(title, cosine_sim=cosine_sim):
     idx = indices[title]
 
