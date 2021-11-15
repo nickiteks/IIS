@@ -2,29 +2,13 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
-# Даныне фильмов
+# Данные фильмов
 metadata = pd.read_csv('movies_metadata.csv', low_memory=False)
 
 # Формула для расчета рейтинга WR = ((v/(v+m)) * R )+( (m/(v+m)) * C )
 # v = vote_count
 # R = vote_average
 # m - Установитьь процентаж
-
-C = metadata['vote_average'].mean()
-m = metadata['vote_count'].quantile(0.90)
-
-
-def weighted_rating(x, m=m, C=C):
-    v = x['vote_count']
-    R = x['vote_average']
-    return ((v / (v + m)) * R) + ((m / (v + m)) * C)
-
-
-# Новый датаФрейм для того что бы не испортить стартоввый
-q_movies = metadata.copy().loc[metadata['vote_count'] >= m]
-q_movies['score'] = q_movies.apply(weighted_rating, axis=1)
-q_movies = q_movies.sort_values('score', ascending=False)
-
 tfidf = TfidfVectorizer(stop_words='english')
 
 metadata['overview'] = metadata['overview'].fillna('')
