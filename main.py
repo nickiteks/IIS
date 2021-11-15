@@ -5,10 +5,6 @@ from sklearn.metrics.pairwise import linear_kernel
 # Данные фильмов
 metadata = pd.read_csv('movies_metadata.csv', low_memory=False)
 
-# Формула для расчета рейтинга WR = ((v/(v+m)) * R )+( (m/(v+m)) * C )
-# v = vote_count
-# R = vote_average
-# m - Установитьь процентаж
 tfidf = TfidfVectorizer(stop_words='english')
 
 metadata['overview'] = metadata['overview'].fillna('')
